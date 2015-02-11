@@ -30,35 +30,6 @@ private func LineBetweenPointsIntersectsRect(p0: MKMapPoint, p1: MKMapPoint, r:M
 }
 
 
-protocol ArithmeticType {
-    func + (Self, Self) -> Self
-    func - (Self, Self) -> Self
-    func / (Self, Self) -> Self
-    func % (Self, Self) -> Self
-    func * (Self, Self) -> Self
-    prefix func --(inout x: Self) -> Self
-    postfix func --(inout x: Self) -> Self
-    prefix func ++(inout x: Self) -> Self
-    postfix func ++(inout x: Self) -> Self
-    func +=(inout lhs: Self, rhs: Self)
-    func -=(inout lhs: Self, rhs: Self)
-    func /=(inout lhs: Self, rhs: Self)
-    func %=(inout lhs: Self, rhs: Self)
-    func *=(inout lhs: Self, rhs: Self)
-}
-extension Double: ArithmeticType {}
-extension Float: ArithmeticType {}
-extension CGFloat: ArithmeticType {}
-extension Int: ArithmeticType {}
-extension UInt: ArithmeticType {}
-extension Int8: ArithmeticType {}
-extension UInt8: ArithmeticType {}
-extension Int16: ArithmeticType {}
-extension UInt16: ArithmeticType {}
-extension Int32: ArithmeticType {}
-extension UInt32: ArithmeticType {}
-extension Int64: ArithmeticType {}
-extension UInt64: ArithmeticType {}
 private func pow2<T: ArithmeticType>(a: T) -> T {
     return a * a
 }
@@ -67,7 +38,7 @@ private func pow2<T: ArithmeticType>(a: T) -> T {
 class CrumbPathRenderer: MKOverlayRenderer {
     
     override func drawMapRect(mapRect: MKMapRect, zoomScale: MKZoomScale, inContext context: CGContext!) {
-        let crumbs = self.overlay as CrumbPath
+        let crumbs = self.overlay as! CrumbPath
         
         let lineWidth = MKRoadWidthAtZoomScale(zoomScale)
         

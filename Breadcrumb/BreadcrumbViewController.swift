@@ -33,7 +33,7 @@ private func DescriptionOfCLAuthorizationStatus(st: CLAuthorizationStatus) -> St
         return "kCLAuthorizationStatusDenied"
         //case kCLAuthorizationStatusAuthorized: is the same as
         //kCLAuthorizationStatusAuthorizedAlways
-    case .Authorized/*Always*/: //needs modification for iOS 8.2 in Xcode 6.2
+    case .AuthorizedAlways: //iOS 8.2 or later        
         return "kCLAuthorizationStatusAuthorizedAlways"
         
     case .AuthorizedWhenInUse:
@@ -122,7 +122,8 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
         // We use -respondsToSelector: to only call the new authorization API on systems that support it.
         //
         if self.locationManager.respondsToSelector("requestWhenInUseAuthorization") {
-            self.locationManager.requestAlwaysAuthorization()
+            //Info.plist contains the entry for NSLocationWhenInUseUsageDescription.
+            self.locationManager.requestWhenInUseAuthorization()
             
             // note: doing so will provide the blue status bar indicating iOS
             // will be tracking your location, when this sample is backgrounded
@@ -200,7 +201,7 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
             }
             
             // we are not using deferred location updates, so always use the latest location
-            let newLocation = locations[0] as CLLocation
+            let newLocation = locations[0] as! CLLocation
             
             if self.crumbs == nil {
                 // This is the first time we're getting a location update, so create
@@ -282,7 +283,7 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
         } else if overlay is MKPolygon {
             #if kDebugShowArea
                 if self.drawingAreaRenderer?.polygon !== overlay {
-                    drawingAreaRenderer = MKPolygonRenderer(polygon: overlay as MKPolygon)
+                    drawingAreaRenderer = MKPolygonRenderer(polygon: overlay as! MKPolygon)
                     self.drawingAreaRenderer!.fillColor = UIColor.blueColor().colorWithAlphaComponent(0.25)
                 }
                 renderer = self.drawingAreaRenderer

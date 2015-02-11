@@ -24,13 +24,13 @@ class BreadcrumbAppDelegate: NSObject, UIApplicationDelegate {
     
     // The app delegate must implement the window @property
     // from UIApplicationDelegate @protocol to use a main storyboard file.
-    var window: UIWindow!
+    var window: UIWindow?
     
     func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
         // it is important to registerDefaults as soon as possible,
         // because it can change so much of how your app behaves
         //
-        let defaultsDictionary = NSMutableDictionary()
+        var defaultsDictionary: [NSObject : AnyObject] = [:]
         
         // by default we track the user location while in the background
         defaultsDictionary[TrackLocationInBackgroundPrefsKey] = true

@@ -24,6 +24,7 @@
 		D76D9C431A765D10003276E8 /* CrumbPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76D9C421A765D10003276E8 /* CrumbPath.swift */; };
 		D76D9C451A765D4F003276E8 /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = D76D9C441A765D4F003276E8 /* readme.txt */; };
 		D76D9C471A765F3B003276E8 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = D76D9C461A765F3B003276E8 /* LICENSE.txt */; };
+		D76E95351A8AEC2500B71F10 /* GenericArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76E95341A8AEC2500B71F10 /* GenericArithmetic.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		D76D9C421A765D10003276E8 /* CrumbPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CrumbPath.swift; path = Breadcrumb/CrumbPath.swift; sourceTree = SOURCE_ROOT; };
 		D76D9C441A765D4F003276E8 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
 		D76D9C461A765F3B003276E8 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
+		D76E95341A8AEC2500B71F10 /* GenericArithmetic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericArithmetic.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 				D76D9C3A1A765CDF003276E8 /* BreadcrumbViewController.swift */,
 				D76D9C3B1A765CDF003276E8 /* SettingsViewController.swift */,
 				1A3C719E118F527000EE06ED /* Overlay */,
+				D76E95311A8AEBF300B71F10 /* OOPUtils */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -132,6 +135,14 @@
 				53DEB8A61249592A00860C26 /* AudioToolbox.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D76E95311A8AEBF300B71F10 /* OOPUtils */ = {
+			isa = PBXGroup;
+			children = (
+				D76E95341A8AEC2500B71F10 /* GenericArithmetic.swift */,
+			);
+			name = OOPUtils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -211,6 +222,7 @@
 				D76D9C3C1A765CDF003276E8 /* BreadcrumbAppDelegate.swift in Sources */,
 				D76D9C3D1A765CDF003276E8 /* BreadcrumbViewController.swift in Sources */,
 				D76D9C431A765D10003276E8 /* CrumbPath.swift in Sources */,
+				D76E95351A8AEC2500B71F10 /* GenericArithmetic.swift in Sources */,
 				D76D9C3E1A765CDF003276E8 /* SettingsViewController.swift in Sources */,
 				D76D9C411A765CF9003276E8 /* CrumbPathRenderer.swift in Sources */,
 			);

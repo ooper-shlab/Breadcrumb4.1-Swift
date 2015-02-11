@@ -37,7 +37,7 @@ private let PickerOptionCellID = "PickerOptionTableViewCell" // generic picker c
 //MARK: -
 
 @objc(AccuracyPickerOption)
-private class AccuracyPickerOption {
+class AccuracyPickerOption {
     
     var headline: String
     var details: String?
@@ -114,7 +114,7 @@ private class SwitchOptionTableViewCell: UITableViewCell {
 //MARK: -
 
 @objc(PickerOptionTableViewCell)
-private class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPickerViewDelegate {
+class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPickerViewDelegate {
     
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var detailsLabel: UILabel!
@@ -130,7 +130,7 @@ private class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource
         self.detailsLabel?.text = options.details
         
         // set the picker to match the value of the default CLLocationAccuracy
-        let accuracyNum = NSUserDefaults.standardUserDefaults().valueForKey(self.defaultsKey) as NSNumber
+        let accuracyNum = NSUserDefaults.standardUserDefaults().valueForKey(self.defaultsKey) as! NSNumber
         let accuracy = CLLocationAccuracy(accuracyNum.doubleValue)
         
         var row = 0
@@ -155,12 +155,12 @@ private class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource
     }
     
     // returns the number of 'columns' to display on the picker
-    private func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return 1
     }
     
     // returns the number of rows in the first component of the picker
-    private func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return 6
     }
     
@@ -200,7 +200,7 @@ private class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource
     }
     
     private func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
-        var customView = view as UILabel!
+        var customView = view as! UILabel!
         if customView == nil {
             customView = UILabel(frame: CGRectZero)
         }
@@ -284,16 +284,16 @@ class SettingsViewController: UITableViewController {
         var cell: UITableViewCell! = nil
         
         if option is AccuracyPickerOption {
-            let pickerCell = tableView.dequeueReusableCellWithIdentifier(PickerOptionCellID) as PickerOptionTableViewCell
+            let pickerCell = tableView.dequeueReusableCellWithIdentifier(PickerOptionCellID) as! PickerOptionTableViewCell
             
-            let pickerOption = option as AccuracyPickerOption
+            let pickerOption = option as! AccuracyPickerOption
             pickerCell.configureWithOptions(pickerOption)
             cell = pickerCell
         }
         if option is SwitchOption {
-            let switchCell = tableView.dequeueReusableCellWithIdentifier(SwitchOptionCellID) as SwitchOptionTableViewCell
+            let switchCell = tableView.dequeueReusableCellWithIdentifier(SwitchOptionCellID) as! SwitchOptionTableViewCell
             
-            let switchOption = option as SwitchOption
+            let switchOption = option as! SwitchOption
             switchCell.configureWithOptiuons(switchOption)
             cell = switchCell
         }

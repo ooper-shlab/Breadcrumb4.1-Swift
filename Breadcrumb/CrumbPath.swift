@@ -17,14 +17,6 @@
 
 import MapKit
 
-func struct_init<T>() -> T {
-    var temp = UnsafeMutablePointer<T>.alloc(1)
-    bzero(temp, UInt(sizeof(T)))
-    let result = temp.memory
-    temp.dealloc(1)
-    return result
-}
-
 
 let MINIMUM_DELTA_METERS = 10.0
 
@@ -37,7 +29,7 @@ class CrumbPath: NSObject, MKOverlay {
     
     private var pointBuffer: [MKMapPoint] = []
     
-    private var rwLock: pthread_rwlock_t = struct_init()
+    private var rwLock = pthread_rwlock_t()
     
     
     
