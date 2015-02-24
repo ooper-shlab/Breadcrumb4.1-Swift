@@ -211,7 +211,7 @@ class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPick
         
         let attrString = NSMutableAttributedString(string: title)
         let font = UIFont.systemFontOfSize(12)
-        attrString.addAttribute(NSFontAttributeName, value: font, range: NSMakeRange(0, title.utf16Count))
+        attrString.addAttribute(NSFontAttributeName, value: font, range: NSMakeRange(0, count(title.utf16)))
         
         customView.attributedText = attrString
         customView.textAlignment = .Center

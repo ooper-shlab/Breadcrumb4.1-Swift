@@ -1,7 +1,7 @@
 //
 //  GenericArithmetic.swift
 //  OOPUtils
-//  Adapted to Swift 1.2 on 2015/2/22.
+//  Adapted to Swift 1.2 beta2 on 2015/2/24.
 //
 //  Created by OOPer in cooperation with shlab.jp, on 2015/1/12.
 //
@@ -51,8 +51,7 @@ protocol ArithmeticType: Comparable {
     postfix func ++ (inout val: Self) -> Self
     postfix func -- (inout val: Self) -> Self
 }
-
-protocol IntegerInitializable/*: IntegerLiteralConvertible*/ {
+protocol IntegerInitializable: IntegerLiteralConvertible {
     init(_: Int)
     init(_: UInt)
     init(_: Int8)
@@ -64,42 +63,37 @@ protocol IntegerInitializable/*: IntegerLiteralConvertible*/ {
     init(_: Int64)
     init(_: UInt64)
 }
-
-protocol IntegerArithmeticType/*: IntegerInitializable, ArithmeticType*/ {
+protocol IntegerArithmeticType: IntegerInitializable, ArithmeticType {
     func &+(lhs: Self, rhs: Self) -> Self
     func &-(lhs: Self, rhs: Self) -> Self
-    func &/(lhs: Self, rhs: Self) -> Self
+    //    func &/(lhs: Self, rhs: Self) -> Self
     func &*(lhs: Self, rhs: Self) -> Self
-    func &%(lhs: Self, rhs: Self) -> Self
+    //    func &%(lhs: Self, rhs: Self) -> Self
     
     func << (lhs: Self, rhs: Self) -> Self
     func >> (lhs: Self, rhs: Self) -> Self
 }
-/*
 protocol SignedIntegerArithmeticType: IntegerArithmeticType, SignedNumberType {}
-*/
-protocol FloatInitializable/*: FloatLiteralConvertible, IntegerInitializable*/ {
+protocol FloatInitializable: FloatLiteralConvertible, IntegerInitializable {
     init(_: Float)
     init(_: Double)
     init(_: CGFloat)
 }
-/*
 protocol FloatArithmeticType: FloatInitializable, ArithmeticType, AbsoluteValuable {}
-*/
-extension UInt: IntegerArithmeticType, IntegerInitializable, ArithmeticType {}
-extension UInt8: IntegerArithmeticType, IntegerInitializable, ArithmeticType {}
-extension UInt16: IntegerArithmeticType, IntegerInitializable, ArithmeticType {}
-extension UInt32: IntegerArithmeticType, IntegerInitializable, ArithmeticType {}
-extension UInt64: IntegerArithmeticType, IntegerInitializable, ArithmeticType {}
-extension Int: IntegerArithmeticType, IntegerInitializable, ArithmeticType {}
-extension Int8: IntegerArithmeticType, IntegerInitializable, ArithmeticType {}
-extension Int16: IntegerArithmeticType, IntegerInitializable, ArithmeticType {}
-extension Int32: IntegerArithmeticType, IntegerInitializable, ArithmeticType {}
-extension Int64: IntegerArithmeticType, IntegerInitializable, ArithmeticType {}
 
-extension Float: FloatInitializable, ArithmeticType {}
-extension Double: FloatInitializable, ArithmeticType {}
-extension CGFloat: FloatInitializable, ArithmeticType {
+extension UInt: IntegerArithmeticType {}
+extension UInt8: IntegerArithmeticType {}
+extension UInt16: IntegerArithmeticType {}
+extension UInt32: IntegerArithmeticType {}
+extension UInt64: IntegerArithmeticType {}
+extension Int: SignedIntegerArithmeticType {}
+extension Int8: SignedIntegerArithmeticType {}
+extension Int16: SignedIntegerArithmeticType {}
+extension Int32: SignedIntegerArithmeticType {}
+extension Int64: SignedIntegerArithmeticType {}
+extension Float: FloatArithmeticType {}
+extension Double: FloatArithmeticType {}
+extension CGFloat: FloatArithmeticType {
     init(_ val: CGFloat) {
         self = val
     }
