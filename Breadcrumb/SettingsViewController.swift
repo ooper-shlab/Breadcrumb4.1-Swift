@@ -199,7 +199,7 @@ class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPick
         return (title, accuracyValue)
     }
     
-    private func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
         var customView = view as! UILabel!
         if customView == nil {
             customView = UILabel(frame: CGRectZero)
@@ -219,7 +219,7 @@ class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPick
         return customView
     }
     
-    private func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         // find the accuracy value from the selected row
         let result = self.accuracyTitleAndValueForRow(row)
         let accuracy = result.value
