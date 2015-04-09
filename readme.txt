@@ -1,7 +1,6 @@
 Breadcrumb
 
 Translated by OOPer in cooperation with shlab.jp, on 2014/12/19.
-Adapted to Swift 1.2 beta2 on 2015/2/24.
 
 Based on
 https://developer.apple.com/library/ios/samplecode/Breadcrumb/Introduction/Intro.html#//apple_ref/doc/uid/DTS40010048
