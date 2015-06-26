@@ -37,7 +37,7 @@ private func pow2<T: ArithmeticType>(a: T) -> T {
 @objc(CrumbPathRenderer)
 class CrumbPathRenderer: MKOverlayRenderer {
     
-    override func drawMapRect(mapRect: MKMapRect, zoomScale: MKZoomScale, inContext context: CGContext!) {
+    override func drawMapRect(mapRect: MKMapRect, zoomScale: MKZoomScale, inContext context: CGContext) {
         let crumbs = self.overlay as! CrumbPath
         
         let lineWidth = MKRoadWidthAtZoomScale(zoomScale)
@@ -56,8 +56,8 @@ class CrumbPathRenderer: MKOverlayRenderer {
         if path != nil {
             CGContextAddPath(context, path)
             CGContextSetRGBStrokeColor(context, 0.0, 0.0, 1.0, 0.5)
-            CGContextSetLineJoin(context, kCGLineJoinRound)
-            CGContextSetLineCap(context, kCGLineCapRound)
+            CGContextSetLineJoin(context, CGLineJoin.Round)
+            CGContextSetLineCap(context, CGLineCap.Round)
             CGContextSetLineWidth(context, lineWidth)
             CGContextStrokePath(context)
         }
@@ -94,7 +94,7 @@ class CrumbPathRenderer: MKOverlayRenderer {
                     let point = points[i]
                     let a2b2 = pow2(point.x - lastPoint.x) + pow2(point.y - lastPoint.y)
                     if a2b2 >= c2 {
-                        if LineBetweenPointsIntersectsRect(point, lastPoint, mapRect) {
+                        if LineBetweenPointsIntersectsRect(point, p1: lastPoint, r: mapRect) {
                             if needsMove {
                                 let lastCGPoint = self.pointForMapPoint(lastPoint)
                                 CGPathMoveToPoint(path, nil, lastCGPoint.x, lastCGPoint.y)
@@ -112,7 +112,7 @@ class CrumbPathRenderer: MKOverlayRenderer {
                 
                 // If the last line segment intersects the mapRect at all, add it unconditionally
                 let point = points.last!
-                if LineBetweenPointsIntersectsRect(point, lastPoint, mapRect) {
+                if LineBetweenPointsIntersectsRect(point, p1: lastPoint, r: mapRect) {
                     if needsMove {
                         let lastCGPoint = self.pointForMapPoint(lastPoint)
                         CGPathMoveToPoint(path, nil, lastCGPoint.x, lastCGPoint.y)

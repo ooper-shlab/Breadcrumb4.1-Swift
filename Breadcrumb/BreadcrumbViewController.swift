@@ -38,8 +38,8 @@ private func DescriptionOfCLAuthorizationStatus(st: CLAuthorizationStatus) -> St
         
     case .AuthorizedWhenInUse:
         return "kCLAuthorizationStatusAuthorizedWhenInUse"
-    default:
-        "Unknown CLAuthorizationStatus value: \(st.rawValue)"
+//    default:
+//        "Unknown CLAuthorizationStatus value: \(st.rawValue)"
     }
 }
 
@@ -121,7 +121,7 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
         // iOS 8 introduced a more powerful privacy model: <https://developer.apple.com/videos/wwdc/2014/?id=706>.
         // We use -respondsToSelector: to only call the new authorization API on systems that support it.
         //
-        if self.locationManager.respondsToSelector("requestWhenInUseAuthorization") {
+        if #available(iOS 8.0, *) {
             //Info.plist contains the entry for NSLocationWhenInUseUsageDescription.
             self.locationManager.requestWhenInUseAuthorization()
             
@@ -192,23 +192,23 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
         let region = MKCoordinateRegionForMapRect(regionRect)
         return region
     }
-    
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        if locations != nil && locations.count > 0 {
+
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if !locations.isEmpty {
             if NSUserDefaults.standardUserDefaults().boolForKey(PlaySoundOnLocationUpdatePrefsKey) {
                 self.setSessionActiveWithMixing(true)
                 self.playSound()
             }
             
             // we are not using deferred location updates, so always use the latest location
-            let newLocation = locations[0] as! CLLocation
+            let newLocation = locations[0]
             
             if self.crumbs == nil {
                 // This is the first time we're getting a location update, so create
                 // the CrumbPath and add it to the map.
                 //
                 crumbs = CrumbPath(centerCoordinate: newLocation.coordinate)
-                self.map.addOverlay(self.crumbs, level: .AboveRoads)
+                self.map.addOverlay(self.crumbs!, level: .AboveRoads)
                 
                 // on the first location update only, zoom map to user location
                 let newCoordinate = newLocation.coordinate
@@ -235,7 +235,7 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
                     // So for the MapView to recognize the overlay's size has changed, we remove it, then add it again.
                     self.map.removeOverlays(self.map.overlays)
                     crumbPathRenderer = nil
-                    self.map.addOverlay(self.crumbs, level: .AboveRoads)
+                    self.map.addOverlay(self.crumbs!, level: .AboveRoads)
                     
                     let r = self.crumbs!.boundingMapRect
                     var pts: [MKMapPoint] = [
@@ -261,18 +261,18 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
         }
     }
     
-    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         NSLog("%@:%d %@", __FILE__, __LINE__, error);
     }
     
-    func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         NSLog("%@:%d %@", __FILE__, __LINE__, DescriptionOfCLAuthorizationStatus(status));
     }
     
     
     //MARK: - MapKit
     
-    func mapView(mapView: MKMapView!, rendererForOverlay overlay: MKOverlay!) -> MKOverlayRenderer! {
+    func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
         var renderer: MKOverlayRenderer? = nil
         
         if overlay is CrumbPath {
@@ -290,7 +290,7 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
             #endif
         }
         
-        return renderer
+        return renderer ?? MKOverlayRenderer(overlay: overlay)
     }
     
     
@@ -300,18 +300,31 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
         // set our default audio session state
         self.setSessionActiveWithMixing(false)
         
-        let heroSoundURL = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("Hero", ofType: "aiff")!)!
-        audioPlayer = AVAudioPlayer(contentsOfURL: heroSoundURL, error: nil)
+        let heroSoundURL = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("Hero", ofType: "aiff")!)
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOfURL: heroSoundURL)
+        } catch _ {
+            audioPlayer = nil
+        }
     }
     
     private func setSessionActiveWithMixing(duckIfOtherAucioIsPlaying: Bool) {
-        AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, withOptions: .MixWithOthers, error: nil)
-        
-        if AVAudioSession.sharedInstance().otherAudioPlaying && duckIfOtherAucioIsPlaying {
-            AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, withOptions: .MixWithOthers | .DuckOthers, error: nil)
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, withOptions: .MixWithOthers)
+        } catch _ {
         }
         
-        AVAudioSession.sharedInstance().setActive(true, error: nil)
+        if AVAudioSession.sharedInstance().otherAudioPlaying && duckIfOtherAucioIsPlaying {
+            do {
+                try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, withOptions: [.MixWithOthers, .DuckOthers])
+            } catch _ {
+            }
+        }
+        
+        do {
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch _ {
+        }
     }
     
     private func playSound() {
@@ -321,8 +334,11 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
         }
     }
     
-    func audioPlayerDidFinishPlaying(player: AVAudioPlayer!, successfully flag: Bool) {
-        AVAudioSession.sharedInstance().setActive(false, error: nil)
+    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
+        do {
+            try AVAudioSession.sharedInstance().setActive(false)
+        } catch _ {
+        }
     }
     
 }

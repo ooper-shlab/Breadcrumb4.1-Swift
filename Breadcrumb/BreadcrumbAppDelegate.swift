@@ -30,7 +30,7 @@ class BreadcrumbAppDelegate: NSObject, UIApplicationDelegate {
         // it is important to registerDefaults as soon as possible,
         // because it can change so much of how your app behaves
         //
-        var defaultsDictionary: [NSObject : AnyObject] = [:]
+        var defaultsDictionary: [String : AnyObject] = [:]
         
         // by default we track the user location while in the background
         defaultsDictionary[TrackLocationInBackgroundPrefsKey] = true

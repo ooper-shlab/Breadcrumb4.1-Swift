@@ -164,7 +164,7 @@ class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPick
         return 6
     }
     
-    private func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+    func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         return 18.0
     }
     
@@ -199,7 +199,7 @@ class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPick
         return (title, accuracyValue)
     }
     
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
         var customView = view as! UILabel!
         if customView == nil {
             customView = UILabel(frame: CGRectZero)
@@ -211,7 +211,7 @@ class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPick
         
         let attrString = NSMutableAttributedString(string: title)
         let font = UIFont.systemFontOfSize(12)
-        attrString.addAttribute(NSFontAttributeName, value: font, range: NSMakeRange(0, count(title.utf16)))
+        attrString.addAttribute(NSFontAttributeName, value: font, range: NSMakeRange(0, title.utf16.count))
         
         customView.attributedText = attrString
         customView.textAlignment = .Center

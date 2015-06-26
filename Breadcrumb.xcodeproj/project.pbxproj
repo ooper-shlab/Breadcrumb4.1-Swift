@@ -17,6 +17,7 @@
 		53DEB8A71249592A00860C26 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53DEB8A61249592A00860C26 /* AudioToolbox.framework */; };
 		53E52D4C19E341EA00C83AF5 /* Hero.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 53E52D4A19E341EA00C83AF5 /* Hero.aiff */; };
 		53E52D5119E3423200C83AF5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53E52D5019E3423200C83AF5 /* Images.xcassets */; };
+		D720B7FC1B3DDE0A003A29ED /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D720B7FB1B3DDE0A003A29ED /* Default-568h@2x.png */; };
 		D76D9C3C1A765CDF003276E8 /* BreadcrumbAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76D9C391A765CDF003276E8 /* BreadcrumbAppDelegate.swift */; };
 		D76D9C3D1A765CDF003276E8 /* BreadcrumbViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76D9C3A1A765CDF003276E8 /* BreadcrumbViewController.swift */; };
 		D76D9C3E1A765CDF003276E8 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76D9C3B1A765CDF003276E8 /* SettingsViewController.swift */; };
@@ -41,6 +42,7 @@
 		53E52D4919E341EA00C83AF5 /* Breadcrumb-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Breadcrumb-Info.plist"; path = "Breadcrumb/Breadcrumb-Info.plist"; sourceTree = SOURCE_ROOT; };
 		53E52D4A19E341EA00C83AF5 /* Hero.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; name = Hero.aiff; path = Breadcrumb/Hero.aiff; sourceTree = SOURCE_ROOT; };
 		53E52D5019E3423200C83AF5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Breadcrumb/Images.xcassets; sourceTree = "<group>"; };
+		D720B7FB1B3DDE0A003A29ED /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		D76D9C391A765CDF003276E8 /* BreadcrumbAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BreadcrumbAppDelegate.swift; path = Breadcrumb/BreadcrumbAppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		D76D9C3A1A765CDF003276E8 /* BreadcrumbViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BreadcrumbViewController.swift; path = Breadcrumb/BreadcrumbViewController.swift; sourceTree = SOURCE_ROOT; };
 		D76D9C3B1A765CDF003276E8 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = Breadcrumb/SettingsViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -101,6 +103,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				D720B7FB1B3DDE0A003A29ED /* Default-568h@2x.png */,
 				D76D9C461A765F3B003276E8 /* LICENSE.txt */,
 				D76D9C441A765D4F003276E8 /* readme.txt */,
 				5358E8441A1FA4FA0063F3E2 /* README.md */,
@@ -171,7 +174,8 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
 						DevelopmentTeam = V7M23Q5387;
@@ -209,6 +213,7 @@
 				D76D9C451A765D4F003276E8 /* readme.txt in Resources */,
 				D76D9C471A765F3B003276E8 /* LICENSE.txt in Resources */,
 				53C56B031A1FEA76005ADAEB /* Storyboard.storyboard in Resources */,
+				D720B7FC1B3DDE0A003A29ED /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,7 +252,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -261,6 +265,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				"OTHER_SWIFT_FLAGS[arch=*]" = "-DkDebugShowArea";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = Breadcrumb;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -274,7 +279,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -285,6 +289,7 @@
 				INFOPLIST_FILE = "Breadcrumb/Breadcrumb-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.apple-samplecode.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = Breadcrumb;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
@@ -300,6 +305,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
