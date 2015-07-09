@@ -96,11 +96,11 @@ private class SwitchOptionTableViewCell: UITableViewCell {
     
     // called from "toggleSwitch" - user changes a setting that uses UISwitch to change its settings
     
-    @IBAction func updatePreferencesFromView(AnyObject) {
+    @IBAction func updatePreferencesFromView(_: AnyObject) {
         NSUserDefaults.standardUserDefaults().setBool(self.switchControl.on, forKey: self.defaultsKey)
     }
     
-    @IBAction func toggleSwitch(AnyObject) {
+    @IBAction func toggleSwitch(_: AnyObject) {
         // one of the UISwitch-based preference has changed
         let aSwitch = self.switchControl
         let newState = aSwitch.on
