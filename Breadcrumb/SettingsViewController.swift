@@ -37,7 +37,7 @@ private let PickerOptionCellID = "PickerOptionTableViewCell" // generic picker c
 //MARK: -
 
 @objc(AccuracyPickerOption)
-class AccuracyPickerOption {
+class AccuracyPickerOption: NSObject {
     
     var headline: String
     var details: String?
@@ -57,7 +57,7 @@ class AccuracyPickerOption {
 //MARK: -
 
 @objc(SwitchOption)
-private class SwitchOption {
+private class SwitchOption: NSObject {
     
     var headline: String
     var details: String
