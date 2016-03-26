@@ -85,7 +85,7 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
         self.initilizeLocationTracking()
         
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "settingsDidChange:",
+            selector: #selector(BreadcrumbViewController.settingsDidChange(_:)),
             name: NSUserDefaultsDidChangeNotification,
             object: nil)
         
@@ -144,11 +144,11 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
         
         // Observe the application going in and out of the background, so we can toggle location tracking.
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "handleUIApplicationDidEnterBackgroundNotification:",
+            selector: #selector(BreadcrumbViewController.handleUIApplicationDidEnterBackgroundNotification(_:)),
             name: UIApplicationDidEnterBackgroundNotification,
             object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self,
-            selector: "handleUIApplicationWillEnterForegroundNotification:",
+            selector: #selector(BreadcrumbViewController.handleUIApplicationWillEnterForegroundNotification(_:)),
             name: UIApplicationWillEnterForegroundNotification,
             object: nil)
     }
@@ -262,11 +262,11 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
     }
     
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-        NSLog("%@:%d %@", __FILE__, __LINE__, error);
+        NSLog("%@:%d %@", #file, #line, error);
     }
     
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        NSLog("%@:%d %@", __FILE__, __LINE__, DescriptionOfCLAuthorizationStatus(status));
+        NSLog("%@:%d %@", #file, #line, DescriptionOfCLAuthorizationStatus(status));
     }
     
     
