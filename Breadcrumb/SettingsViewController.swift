@@ -87,23 +87,23 @@ private class SwitchOptionTableViewCell: UITableViewCell {
     
     //MARK: -
     
-    func configureWithOptiuons(options: SwitchOption) {
+    func configureWithOptiuons(_ options: SwitchOption) {
         self.titleLabel?.text = options.headline
         self.defaultsKey = options.defaultsKey
         self.detailsLabel?.text = options.details
-        self.switchControl.on = NSUserDefaults.standardUserDefaults().boolForKey(self.defaultsKey)
+        self.switchControl.isOn = UserDefaults.standard.bool(forKey: self.defaultsKey)
     }
     
     // called from "toggleSwitch" - user changes a setting that uses UISwitch to change its settings
     
     @IBAction func updatePreferencesFromView(_: AnyObject) {
-        NSUserDefaults.standardUserDefaults().setBool(self.switchControl.on, forKey: self.defaultsKey)
+        UserDefaults.standard.set(self.switchControl.isOn, forKey: self.defaultsKey)
     }
     
     @IBAction func toggleSwitch(_: AnyObject) {
         // one of the UISwitch-based preference has changed
-        let aSwitch = self.switchControl
-        let newState = aSwitch.on
+        let aSwitch: UISwitch = self.switchControl
+        let newState = aSwitch.isOn
         aSwitch.setOn(newState, animated: true)
         self.updatePreferencesFromView(aSwitch)
     }
@@ -124,13 +124,13 @@ class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPick
     
     //MARK: -
     
-    func configureWithOptions(options: AccuracyPickerOption) {
+    func configureWithOptions(_ options: AccuracyPickerOption) {
         self.titleLabel?.text = options.headline
         self.defaultsKey = options.defaultsKey
         self.detailsLabel?.text = options.details
         
         // set the picker to match the value of the default CLLocationAccuracy
-        let accuracyNum = NSUserDefaults.standardUserDefaults().valueForKey(self.defaultsKey) as! NSNumber
+        let accuracyNum = UserDefaults.standard.value(forKey: self.defaultsKey) as! NSNumber
         let accuracy = CLLocationAccuracy(accuracyNum.doubleValue)
         
         var row = 0
@@ -155,21 +155,21 @@ class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPick
     }
     
     // returns the number of 'columns' to display on the picker
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
     // returns the number of rows in the first component of the picker
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return 6
     }
     
-    func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         return 18.0
     }
     
     
-    func accuracyTitleAndValueForRow(row: Int) -> (title: String, value: CLLocationAccuracy) {
+    func accuracyTitleAndValueForRow(_ row: Int) -> (title: String, value: CLLocationAccuracy) {
         var title = ""
         var accuracyValue: CLLocationAccuracy = -1
         
@@ -199,10 +199,10 @@ class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPick
         return (title, accuracyValue)
     }
     
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
-        var customView = view as! UILabel!
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        var customView: UILabel! = view as! UILabel!
         if customView == nil {
-            customView = UILabel(frame: CGRectZero)
+            customView = UILabel(frame: CGRect())
         }
         
         // find the accuracy title for the given row
@@ -210,16 +210,16 @@ class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPick
         let title = result.title
         
         let attrString = NSMutableAttributedString(string: title)
-        let font = UIFont.systemFontOfSize(12)
+        let font = UIFont.systemFont(ofSize: 12)
         attrString.addAttribute(NSFontAttributeName, value: font, range: NSMakeRange(0, title.utf16.count))
         
         customView.attributedText = attrString
-        customView.textAlignment = .Center
+        customView.textAlignment = .center
         
         return customView
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         // find the accuracy value from the selected row
         let result = self.accuracyTitleAndValueForRow(row)
         let accuracy = result.value
@@ -227,8 +227,8 @@ class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPick
         // this will cause an NSNotification to occur (NSUserDefaultsDidChangeNotification)
         // ultimately calling BreadcrumbViewController - (void)settingsDidChange:(NSNotification *)notification
         //
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setInteger(Int(accuracy), forKey: LocationTrackingAccuracyPrefsKey)
+        let defaults = UserDefaults.standard
+        defaults.set(Int(accuracy), forKey: LocationTrackingAccuracyPrefsKey)
     }
     
 }
@@ -260,7 +260,7 @@ class SettingsViewController: UITableViewController {
         ]
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         var cellHeight: CGFloat = 0.0
         
         let option: AnyObject = self.settings[indexPath.row]
@@ -274,24 +274,24 @@ class SettingsViewController: UITableViewController {
         return cellHeight
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.settings.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let option: AnyObject = self.settings[indexPath.row]
         
         var cell: UITableViewCell! = nil
         
         if option is AccuracyPickerOption {
-            let pickerCell = tableView.dequeueReusableCellWithIdentifier(PickerOptionCellID) as! PickerOptionTableViewCell
+            let pickerCell = tableView.dequeueReusableCell(withIdentifier: PickerOptionCellID) as! PickerOptionTableViewCell
             
             let pickerOption = option as! AccuracyPickerOption
             pickerCell.configureWithOptions(pickerOption)
             cell = pickerCell
         }
         if option is SwitchOption {
-            let switchCell = tableView.dequeueReusableCellWithIdentifier(SwitchOptionCellID) as! SwitchOptionTableViewCell
+            let switchCell = tableView.dequeueReusableCell(withIdentifier: SwitchOptionCellID) as! SwitchOptionTableViewCell
             
             let switchOption = option as! SwitchOption
             switchCell.configureWithOptiuons(switchOption)

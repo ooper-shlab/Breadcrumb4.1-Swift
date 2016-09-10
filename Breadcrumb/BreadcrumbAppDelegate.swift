@@ -26,27 +26,29 @@ class BreadcrumbAppDelegate: NSObject, UIApplicationDelegate {
     // from UIApplicationDelegate @protocol to use a main storyboard file.
     var window: UIWindow?
     
-    func application(application: UIApplication, willFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
+    let a: NSString = "abc"
+
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         // it is important to registerDefaults as soon as possible,
         // because it can change so much of how your app behaves
         //
         var defaultsDictionary: [String : AnyObject] = [:]
         
         // by default we track the user location while in the background
-        defaultsDictionary[TrackLocationInBackgroundPrefsKey] = true
+        defaultsDictionary[TrackLocationInBackgroundPrefsKey] = true as NSNumber
         
         // by default we use the best accuracy setting (kCLLocationAccuracyBest)
-        defaultsDictionary[LocationTrackingAccuracyPrefsKey] = kCLLocationAccuracyBest
+        defaultsDictionary[LocationTrackingAccuracyPrefsKey] = kCLLocationAccuracyBest as NSNumber
         
         // by default we play a sound in the background to signify a location change
-        defaultsDictionary[PlaySoundOnLocationUpdatePrefsKey] = true
+        defaultsDictionary[PlaySoundOnLocationUpdatePrefsKey] = true as NSNumber
         
-        NSUserDefaults.standardUserDefaults().registerDefaults(defaultsDictionary)
+        UserDefaults.standard.register(defaults: defaultsDictionary)
         
         return true
     }
     
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         //..
         return true
     }

@@ -39,7 +39,7 @@ class CrumbPath: NSObject, MKOverlay {
     // The CrumbPath's boundingMapRect will be set to a sufficiently large square
     // centered on the starting coordinate.
     //
-    init(centerCoordinate coord: CLLocationCoordinate2D) {
+    init(center coord: CLLocationCoordinate2D) {
         // Initialize point storage and place this first coordinate in it
         pointBuffer.reserveCapacity(1000)
         let origin = MKMapPointForCoordinate(coord)
@@ -75,14 +75,14 @@ class CrumbPath: NSObject, MKOverlay {
     }
     
     // Synchronously evaluate a block with the current buffer of points.
-    func readPointsWithBlockAndWait(block: [MKMapPoint] -> Void) {
+    func readPointsWithBlockAndWait(_ block: ([MKMapPoint]) -> Void) {
         // Acquire the write lock so the list of points isn't changed while we read it
         pthread_rwlock_wrlock(&rwLock)
         block(pointBuffer)
         pthread_rwlock_unlock(&rwLock)
     }
     
-    private func growOverlayBounds(overlayBounds: MKMapRect, toInclude otherRect: MKMapRect) -> MKMapRect {
+    private func growOverlayBounds(_ overlayBounds: MKMapRect, toInclude otherRect: MKMapRect) -> MKMapRect {
         // The -boundingMapRect we choose was too small.
         // We grow it to be both rects, plus about
         // an extra kilometer in every direction that was too small before.
@@ -121,7 +121,7 @@ class CrumbPath: NSObject, MKOverlay {
         return grownBounds
     }
     
-    private func mapRectContainingPoint(p1: MKMapPoint, andPoint p2: MKMapPoint) -> MKMapRect {
+    private func mapRectContainingPoint(_ p1: MKMapPoint, andPoint p2: MKMapPoint) -> MKMapRect {
         let pointSize = MKMapSizeMake(0, 0)
         let newPointRect = MKMapRect(origin: p1, size: pointSize)
         let prevPointRect = MKMapRect(origin: p2, size: pointSize)
@@ -134,7 +134,7 @@ class CrumbPath: NSObject, MKOverlay {
     // the previously added coordinate it will not be added to the list and
     // MKMapRectNull will be returned.
     //
-    func addCoordinate(newCoord: CLLocationCoordinate2D, boundingMapRectChanged boundingMapRectChangedOut: UnsafeMutablePointer<Bool>) -> MKMapRect {
+    func addCoordinate(_ newCoord: CLLocationCoordinate2D, boundingMapRectChanged boundingMapRectChangedOut: UnsafeMutablePointer<Bool>?) -> MKMapRect {
         // Acquire the write lock because we are going to be changing the list of points
         pthread_rwlock_wrlock(&rwLock)
         
@@ -167,9 +167,7 @@ class CrumbPath: NSObject, MKOverlay {
         }
         
         // Report if -boundingMapRect changed
-        if boundingMapRectChangedOut != nil {
-            boundingMapRectChangedOut.memory = boundingMapRectChanged
-        }
+        boundingMapRectChangedOut?.pointee = boundingMapRectChanged
         
         pthread_rwlock_unlock(&rwLock)
         
