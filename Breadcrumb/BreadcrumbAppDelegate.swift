@@ -26,8 +26,6 @@ class BreadcrumbAppDelegate: NSObject, UIApplicationDelegate {
     // from UIApplicationDelegate @protocol to use a main storyboard file.
     var window: UIWindow?
     
-    let a: NSString = "abc"
-
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         // it is important to registerDefaults as soon as possible,
         // because it can change so much of how your app behaves
