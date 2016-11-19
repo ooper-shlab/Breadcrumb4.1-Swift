@@ -284,7 +284,7 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
             #if kDebugShowArea
                 if self.drawingAreaRenderer?.polygon !== overlay {
                     drawingAreaRenderer = MKPolygonRenderer(polygon: overlay as! MKPolygon)
-                    self.drawingAreaRenderer!.fillColor = UIColor.blueColor().colorWithAlphaComponent(0.25)
+                    self.drawingAreaRenderer!.fillColor = UIColor.blue.withAlphaComponent(0.25)
                 }
                 renderer = self.drawingAreaRenderer
             #endif
