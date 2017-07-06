@@ -23,7 +23,7 @@
 		D76D9C3E1A765CDF003276E8 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76D9C3B1A765CDF003276E8 /* SettingsViewController.swift */; };
 		D76D9C411A765CF9003276E8 /* CrumbPathRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76D9C401A765CF9003276E8 /* CrumbPathRenderer.swift */; };
 		D76D9C431A765D10003276E8 /* CrumbPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76D9C421A765D10003276E8 /* CrumbPath.swift */; };
-		D76D9C451A765D4F003276E8 /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = D76D9C441A765D4F003276E8 /* readme.txt */; };
+		D76D9C451A765D4F003276E8 /* README2.md in Resources */ = {isa = PBXBuildFile; fileRef = D76D9C441A765D4F003276E8 /* README2.md */; };
 		D76D9C471A765F3B003276E8 /* LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = D76D9C461A765F3B003276E8 /* LICENSE.txt */; };
 		D76E95351A8AEC2500B71F10 /* GenericArithmetic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76E95341A8AEC2500B71F10 /* GenericArithmetic.swift */; };
 /* End PBXBuildFile section */
@@ -48,7 +48,7 @@
 		D76D9C3B1A765CDF003276E8 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsViewController.swift; path = Breadcrumb/SettingsViewController.swift; sourceTree = SOURCE_ROOT; };
 		D76D9C401A765CF9003276E8 /* CrumbPathRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CrumbPathRenderer.swift; path = Breadcrumb/CrumbPathRenderer.swift; sourceTree = SOURCE_ROOT; };
 		D76D9C421A765D10003276E8 /* CrumbPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CrumbPath.swift; path = Breadcrumb/CrumbPath.swift; sourceTree = SOURCE_ROOT; };
-		D76D9C441A765D4F003276E8 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
+		D76D9C441A765D4F003276E8 /* README2.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README2.md; sourceTree = "<group>"; };
 		D76D9C461A765F3B003276E8 /* LICENSE.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
 		D76E95341A8AEC2500B71F10 /* GenericArithmetic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericArithmetic.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -105,7 +105,7 @@
 			children = (
 				D720B7FB1B3DDE0A003A29ED /* Default-568h@2x.png */,
 				D76D9C461A765F3B003276E8 /* LICENSE.txt */,
-				D76D9C441A765D4F003276E8 /* readme.txt */,
+				D76D9C441A765D4F003276E8 /* README2.md */,
 				5358E8441A1FA4FA0063F3E2 /* README.md */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -210,7 +210,7 @@
 			files = (
 				53E52D5119E3423200C83AF5 /* Images.xcassets in Resources */,
 				53E52D4C19E341EA00C83AF5 /* Hero.aiff in Resources */,
-				D76D9C451A765D4F003276E8 /* readme.txt in Resources */,
+				D76D9C451A765D4F003276E8 /* README2.md in Resources */,
 				D76D9C471A765F3B003276E8 /* LICENSE.txt in Resources */,
 				53C56B031A1FEA76005ADAEB /* Storyboard.storyboard in Resources */,
 				D720B7FC1B3DDE0A003A29ED /* Default-568h@2x.png in Resources */,
