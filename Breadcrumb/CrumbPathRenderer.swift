@@ -25,12 +25,12 @@ private func LineBetweenPointsIntersectsRect(_ p0: MKMapPoint, _ p1: MKMapPoint,
     let maxX = max(p0.x, p1.x)
     let maxY = max(p0.y, p1.y)
     
-    let r2 = MKMapRectMake(minX, minY, maxX - minX, maxY - minY)
-    return MKMapRectIntersectsRect(r, r2)
+    let r2 = MKMapRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
+    return r.intersects(r2)
 }
 
 
-private func pow2<T: Computable>(_ a: T) -> T {
+private func pow2<T: Numeric>(_ a: T) -> T {
     return a * a
 }
 
@@ -44,7 +44,7 @@ class CrumbPathRenderer: MKOverlayRenderer {
         
         // outset the map rect by the line width so that points just outside
         // of the currently drawn rect are included in the generated path.
-        let clipRect = MKMapRectInset(mapRect, Double(-lineWidth), Double(-lineWidth))
+        let clipRect = mapRect.insetBy(dx: Double(-lineWidth), dy: Double(-lineWidth))
         
         var path: CGPath?
         crumbs.readPointsWithBlockAndWait {points in

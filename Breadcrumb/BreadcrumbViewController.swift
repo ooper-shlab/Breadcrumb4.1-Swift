@@ -38,8 +38,8 @@ private func DescriptionOfCLAuthorizationStatus(_ st: CLAuthorizationStatus) -> 
         
     case .authorizedWhenInUse:
         return "kCLAuthorizationStatusAuthorizedWhenInUse"
-//    default:
-//        "Unknown CLAuthorizationStatus value: \(st.rawValue)"
+    @unknown default:
+        return "Unknown CLAuthorizationStatus value: \(st.rawValue)"
     }
 }
 
@@ -61,7 +61,7 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
     //MARK: -
     
     // called for NSUserDefaultsDidChangeNotification
-    func settingsDidChange(_ notification: NSNotification) {
+    @objc func settingsDidChange(_ notification: NSNotification) {
         let settings = UserDefaults.standard
         
         // update our location manager for these settings changes:
@@ -145,19 +145,19 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
         // Observe the application going in and out of the background, so we can toggle location tracking.
         NotificationCenter.default.addObserver(self,
             selector: #selector(BreadcrumbViewController.handleUIApplicationDidEnterBackgroundNotification(_:)),
-            name: .UIApplicationDidEnterBackground,
+            name: UIApplication.didEnterBackgroundNotification,
             object: nil)
         NotificationCenter.default.addObserver(self,
             selector: #selector(BreadcrumbViewController.handleUIApplicationWillEnterForegroundNotification(_:)),
-            name: .UIApplicationWillEnterForeground,
+            name: UIApplication.willEnterForegroundNotification,
             object: nil)
     }
     
-    func handleUIApplicationDidEnterBackgroundNotification(_ note: NSNotification) {
+    @objc func handleUIApplicationDidEnterBackgroundNotification(_ note: NSNotification) {
         self.switchToBackgroundMode(true)
     }
     
-    func handleUIApplicationWillEnterForegroundNotification(_ note: NSNotification) {
+    @objc func handleUIApplicationWillEnterForegroundNotification(_ note: NSNotification) {
         self.switchToBackgroundMode(false)
     }
     
@@ -181,15 +181,15 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
         let radiusInMapPoints = radiusInMeters * MKMapPointsPerMeterAtLatitude(centerCoordinate.latitude)
         let radiusSquared = MKMapSize(width: radiusInMapPoints, height: radiusInMapPoints)
         
-        let regionOrigin = MKMapPointForCoordinate(centerCoordinate)
+        let regionOrigin = MKMapPoint(centerCoordinate)
         var regionRect = MKMapRect(origin: regionOrigin, size: radiusSquared)
         
-        regionRect = MKMapRectOffset(regionRect, -radiusInMapPoints/2, -radiusInMapPoints/2)
+        regionRect = regionRect.offsetBy(dx: -radiusInMapPoints/2, dy: -radiusInMapPoints/2)
         
         // clamp the rect to be within the world
-        regionRect = MKMapRectIntersection(regionRect, MKMapRectWorld)
+        regionRect = regionRect.intersection(.world)
         
-        let region = MKCoordinateRegionForMapRect(regionRect)
+        let region = MKCoordinateRegion(regionRect)
         return region
     }
 
@@ -208,7 +208,7 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
                 // the CrumbPath and add it to the map.
                 //
                 crumbs = CrumbPath(center: newLocation.coordinate)
-                self.map.add(self.crumbs!, level: .aboveRoads)
+                self.map.addOverlay(self.crumbs!, level: .aboveRoads)
                 
                 // on the first location update only, zoom map to user location
                 let newCoordinate = newLocation.coordinate
@@ -235,27 +235,27 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
                     // So for the MapView to recognize the overlay's size has changed, we remove it, then add it again.
                     self.map.removeOverlays(self.map.overlays)
                     crumbPathRenderer = nil
-                    self.map.add(self.crumbs!, level: .aboveRoads)
+                    self.map.addOverlay(self.crumbs!, level: .aboveRoads)
                     
                     let r = self.crumbs!.boundingMapRect
                     var pts: [MKMapPoint] = [
-                        MKMapPointMake(MKMapRectGetMinX(r), MKMapRectGetMinY(r)),
-                        MKMapPointMake(MKMapRectGetMinX(r), MKMapRectGetMaxY(r)),
-                        MKMapPointMake(MKMapRectGetMaxX(r), MKMapRectGetMaxY(r)),
-                        MKMapPointMake(MKMapRectGetMaxX(r), MKMapRectGetMinY(r)),
+                        MKMapPoint(x: r.minX, y: r.minY),
+                        MKMapPoint(x: r.minX, y: r.maxY),
+                        MKMapPoint(x: r.maxX, y: r.maxY),
+                        MKMapPoint(x: r.maxX, y: r.minY),
                     ]
                     let count = pts.count
                     let boundingMapRectOverlay = MKPolygon(points: &pts, count: count)
-                    self.map.add(boundingMapRectOverlay, level: .aboveRoads)
-                } else if !MKMapRectIsNull(updateRect) {
+                    self.map.addOverlay(boundingMapRectOverlay, level: .aboveRoads)
+                } else if !updateRect.isNull {
                     // There is a non null update rect.
                     // Compute the currently visible map zoom scale
                     let currentZoomScale = MKZoomScale(self.map.bounds.size.width / CGFloat(self.map.visibleMapRect.size.width))
                     // Find out the line width at this zoom scale and outset the updateRect by that amount
                     let lineWidth = MKRoadWidthAtZoomScale(currentZoomScale)
-                    updateRect = MKMapRectInset(updateRect, Double(-lineWidth), Double(-lineWidth))
+                    updateRect = updateRect.insetBy(dx: Double(-lineWidth), dy: Double(-lineWidth))
                     // Ask the overlay view to update just the changed area.
-                    self.crumbPathRenderer?.setNeedsDisplayIn(updateRect)
+                    self.crumbPathRenderer?.setNeedsDisplay(updateRect)
                 }
             }
         }
@@ -310,13 +310,21 @@ class BreadcrumbViewController: UIViewController, MKMapViewDelegate, CLLocationM
     
     private func setSessionActiveWithMixing(_ duckIfOtherAucioIsPlaying: Bool) {
         do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
+            if #available(iOS 10.0, *) {
+                try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: .mixWithOthers)
+            } else {
+                try AVAudioSession.sharedInstance().setCategory(.playback, options: .mixWithOthers)
+            }
         } catch _ {
         }
         
         if AVAudioSession.sharedInstance().isOtherAudioPlaying && duckIfOtherAucioIsPlaying {
             do {
-                try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: [.mixWithOthers, .duckOthers])
+                if #available(iOS 10.0, *) {
+                    try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers, .duckOthers])
+                } else {
+                    try AVAudioSession.sharedInstance().setCategory(.playback, options: [.mixWithOthers, .duckOthers])
+                }
             } catch _ {
             }
         }

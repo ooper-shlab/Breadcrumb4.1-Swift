@@ -200,10 +200,8 @@ class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPick
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-        var customView: UILabel! = view as! UILabel!
-        if customView == nil {
-            customView = UILabel(frame: CGRect())
-        }
+        let customView: UILabel = view as? UILabel
+            ?? UILabel(frame: CGRect())
         
         // find the accuracy title for the given row
         let result = self.accuracyTitleAndValueForRow(row)
@@ -211,7 +209,7 @@ class PickerOptionTableViewCell: UITableViewCell, UIPickerViewDataSource, UIPick
         
         let attrString = NSMutableAttributedString(string: title)
         let font = UIFont.systemFont(ofSize: 12)
-        attrString.addAttribute(NSFontAttributeName, value: font, range: NSMakeRange(0, title.utf16.count))
+        attrString.addAttribute(.font, value: font, range: NSMakeRange(0, title.utf16.count))
         
         customView.attributedText = attrString
         customView.textAlignment = .center

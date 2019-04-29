@@ -42,7 +42,7 @@ class CrumbPath: NSObject, MKOverlay {
     init(center coord: CLLocationCoordinate2D) {
         // Initialize point storage and place this first coordinate in it
         pointBuffer.reserveCapacity(1000)
-        let origin = MKMapPointForCoordinate(coord)
+        let origin = MKMapPoint(coord)
         pointBuffer.append(origin)
         
         // Default -boundingMapRect size is 1km^2 centered on coord
@@ -52,7 +52,7 @@ class CrumbPath: NSObject, MKOverlay {
         super.init()
         
         // Clamp the rect to be within the world
-        boundingMapRect = MKMapRectIntersection(boundingMapRect, MKMapRectWorld)
+        boundingMapRect = boundingMapRect.intersection(.world)
         
         // Initialize read-write lock for drawing and updates
         //
@@ -69,7 +69,7 @@ class CrumbPath: NSObject, MKOverlay {
     var coordinate : CLLocationCoordinate2D {
         var centerCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
         self.readPointsWithBlockAndWait {pointsArray in
-            centerCoordinate = MKCoordinateForMapPoint(pointsArray[0])
+            centerCoordinate = pointsArray[0].coordinate
         }
         return centerCoordinate
     }
@@ -89,7 +89,7 @@ class CrumbPath: NSObject, MKOverlay {
         // Usually the crumb-trail will keep growing in the direction it grew before
         // so this minimizes having to regrow, without growing off-trail.
         
-        var grownBounds = MKMapRectUnion(overlayBounds, otherRect)
+        var grownBounds = overlayBounds.union(otherRect)
         
         // Pedantically, to grow the overlay by one real kilometer, we would need to
         // grow different sides by a different number of map points, to account for
@@ -97,35 +97,35 @@ class CrumbPath: NSObject, MKOverlay {
         // But we don't need to be exact. The center of the rect that ran over
         // is a good enough estimate for where we'll be growing the overlay.
         
-        let oneKilometerInMapPoints = 1000*MKMapPointsPerMeterAtLatitude(MKCoordinateForMapPoint(otherRect.origin).latitude)
+        let oneKilometerInMapPoints = 1000*MKMapPointsPerMeterAtLatitude(otherRect.origin.coordinate.latitude)
         
         // Grow by an extra kilometer in the direction of each overrun.
-        if MKMapRectGetMinY(otherRect) < MKMapRectGetMinY(overlayBounds) {
+        if otherRect.minY < overlayBounds.minY {
             grownBounds.origin.y -= oneKilometerInMapPoints
             grownBounds.size.height += oneKilometerInMapPoints
         }
-        if MKMapRectGetMaxX(otherRect) > MKMapRectGetMaxX(overlayBounds) {
+        if otherRect.maxX > overlayBounds.maxX {
             grownBounds.size.height += oneKilometerInMapPoints
         }
-        if MKMapRectGetMinX(otherRect) < MKMapRectGetMinX(overlayBounds) {
+        if otherRect.minX < overlayBounds.minX {
             grownBounds.origin.x -= oneKilometerInMapPoints
             grownBounds.size.width += oneKilometerInMapPoints
         }
-        if MKMapRectGetMaxX(otherRect) > MKMapRectGetMaxX(overlayBounds) {
+        if otherRect.maxX > overlayBounds.maxX {
             grownBounds.size.width += oneKilometerInMapPoints
         }
         
         // Clip to world size
-        grownBounds = MKMapRectIntersection(grownBounds, MKMapRectWorld)
+        grownBounds = grownBounds.intersection(.world)
         
         return grownBounds
     }
     
     private func mapRectContainingPoint(_ p1: MKMapPoint, andPoint p2: MKMapPoint) -> MKMapRect {
-        let pointSize = MKMapSizeMake(0, 0)
+        let pointSize = MKMapSize(width: 0, height: 0)
         let newPointRect = MKMapRect(origin: p1, size: pointSize)
         let prevPointRect = MKMapRect(origin: p2, size: pointSize)
-        return MKMapRectUnion(newPointRect, prevPointRect)
+        return newPointRect.union(prevPointRect)
     }
     
     // Add a location observation. A MKMapRect containing the newly added point
@@ -140,14 +140,14 @@ class CrumbPath: NSObject, MKOverlay {
         
         //Assume no changes until we make one.
         var boundingMapRectChanged = false
-        var updateRect = MKMapRectNull
+        var updateRect = MKMapRect.null
         
         // Convert to map space
-        let newPoint = MKMapPointForCoordinate(newCoord)
+        let newPoint = MKMapPoint(newCoord)
         
         // Get the distance between this new point and the previous point.
         let prevPoint = pointBuffer.last!
-        let metersApart = MKMetersBetweenMapPoints(newPoint, prevPoint)
+        let metersApart = newPoint.distance(to: prevPoint)
         
         // Ignore the point if it's too close to the previous one.
         if metersApart > MINIMUM_DELTA_METERS {
@@ -160,7 +160,7 @@ class CrumbPath: NSObject, MKOverlay {
             
             //Update the -boundingMapRect to hold the new point if needed
             let overlayBounds = self.boundingMapRect
-            if !MKMapRectContainsRect(overlayBounds,updateRect) {
+            if !overlayBounds.contains(updateRect) {
                 self.boundingMapRect = self.growOverlayBounds(overlayBounds, toInclude: updateRect)
                 boundingMapRectChanged = true
             }
